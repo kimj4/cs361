@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.BitSet;
 import java.util.Random;
+import java.util.ArrayList;
+import java.lang.Math;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 /**
@@ -55,12 +59,137 @@ public class Breeder extends JPanel
       	    rand = new Random(seed); //uses seed set in rules for repeatability
     }
 
-    public fitnessProportionalSelection() {
+    public Prisoner[] fitnessProportionalSelection() {
+
+        return this.stochasticUniversal(this.getScaledFitness());
 
     }
 
-    public tournamentSelection() {
-      
+    public double[] getScaledFitness() {
+
+        double totalFitness = 0;
+        double meanFitness;
+        double stdDev = 0;
+        double scaledFitnessList[] = new double[popSize];
+
+        for (int i = 0; i < popSize; i ++) {
+            totalFitness += curPopulation[i].getScore();
+        }
+
+        meanFitness = totalFitness / popSize;
+
+        for (int i = 0; i < popSize; i ++) {
+            stdDev += Math.pow((curPopulation[i].getScore()-meanFitness),2);
+        }
+
+        stdDev = Math.pow(stdDev/popSize,.5);
+
+        for (int i = 0; i < popSize; i ++) {
+            if (stdDev == 0){
+                scaledFitnessList[i]=1;
+            }
+            else{
+                scaledFitnessList[i] = 1+(curPopulation[i].getScore()-meanFitness)/(2*stdDev);
+            }
+
+        }
+
+        return scaledFitnessList;
+    }
+
+    public Prisoner[] stochasticUniversal(double[] scaledFitnessList) {
+        if (selParam > popSize){
+            selParam = popSize;
+        }
+
+
+         double runningSums[] = new double[popSize];
+         double ticks[] = new double[popSize-selParam];
+         double randOffset;
+         Prisoner Selected[] = new Prisoner[popSize];
+         ArrayList<Prisoner> subPop = new ArrayList<Prisoner>(Arrays.asList(curPopulation));
+         Prisoner clonedPrisoner;
+
+         for (int i = 0; i < popSize; i ++) {
+            if (i==0){
+                runningSums[i]=scaledFitnessList[i];
+            }
+            else {
+                runningSums[i]=scaledFitnessList[i]+runningSums[i-1];
+            }
+        }
+
+        for (int i = 0; i < ticks.length; i ++) {
+            ticks[i]=i*runningSums[popSize-1]/popSize;
+        }
+
+        randOffset = rand.nextDouble()*runningSums[popSize-1];
+
+        for (int i = 0; i < ticks.length; i ++) {
+            ticks[i]=(ticks[i]+randOffset);
+            if (ticks[i]>runningSums[popSize-1]){
+                ticks[i] = ticks[i]-runningSums[popSize-1];
+            }
+        }
+
+        for (int tick = 0; tick < ticks.length; tick ++) { // Loop through the ticks
+            Selected[tick]=curPopulation[0]; //default
+            for (int sum = popSize - 1; sum >= 0; sum --) { // Loop through scaledFitnessList
+                if (ticks[tick] > runningSums[sum]){
+                    Selected[tick]=curPopulation[sum+1];
+                    break;
+                }
+            }
+        }
+
+
+        for (int clone = 1; clone <= selParam; clone ++){
+            clonedPrisoner=bestPrisoner(subPop);
+            Selected[popSize-clone]=clonedPrisoner;
+            subPop.remove(clonedPrisoner);
+        }
+
+
+        return Selected;
+
+    }
+
+    public Prisoner bestPrisoner(ArrayList<Prisoner> prisonerList) {
+
+        int bestFitness = 0;
+        int bestIndex = 0;
+
+        for (int i=0; i<prisonerList.size(); i++){
+            if (prisonerList.get(i).getScore()>bestFitness){
+                bestFitness=prisonerList.get(i).getScore();
+                bestIndex=i;
+            }
+        }
+        return prisonerList.get(bestIndex);
+    }
+
+    public Prisoner[] tournamentSelection() {
+        // for each tournament, choose selParam number of unique individuals
+        //  select one with the highest fitness
+        // perform popSize number of tournaments
+        Prisoner Selected[] = new Prisoner[popSize];
+        int bestIndex = 0;
+        double bestFitness = 0;
+        ArrayList<Prisoner> curPopList = new ArrayList<Prisoner>(Arrays.asList(curPopulation));
+        for (int i = 0; i < popSize; i++) {
+            Collections.shuffle(curPopList);
+            bestIndex = 0;
+            bestFitness = 0;
+            for (int j = 0; j < selParam; j++) {
+                if (curPopList.get(j).getScore() > bestFitness) {
+                    bestFitness = curPopList.get(j).getScore();
+                    bestIndex = j;
+                }
+            }
+            Selected[i] = curPopList.get(bestIndex);
+        }
+
+        return Selected;
     }
 
     /**
@@ -112,9 +241,9 @@ public class Breeder extends JPanel
             		Selected[i] = (Prisoner)curPopulation[selIndex].clone();
       	    }
       	} else if (selection == 1) {
-            // fitness proportionall with all modifiers
+            Selected=fitnessProportionalSelection();
         } else if (selection == 2) {
-            // tournament
+            Selected=tournamentSelection();
         } else {  // any other selection method fill pop with always cooperate
       	    for (int i=0; i<popSize; i++)
       		      Selected[i] = new Prisoner("ALLC");
@@ -123,30 +252,49 @@ public class Breeder extends JPanel
 
       	//Crossover & Mutate each pair of selected parents
       	BitSet Offspring[] = new BitSet[2];  // temporarily holds 2 children during crossover/mutation
-      	for (int d=0; d<popSize; d+=2) {
-      	    // in case of odd population, just mutate and replace last individual
-      	    if (d+1 >= popSize) {
-            		Offspring[0] = Genetic.mutate(Selected[d].getStrat(), mutateP, rand);
-            		Selected[d] = new Prisoner(Offspring[0]);
-      	    }
-      	    else {
-            		if(rand.nextDouble() <= crossP) //Cross Over
-            		    Offspring = Genetic.crossover(Selected[d].getStrat(),Selected[d+1].getStrat(), rand);
-            		else { //clones
-              			Offspring[0] = (BitSet)Selected[d].getStrat().clone();
-              			Offspring[1] = (BitSet)Selected[d+1].getStrat().clone();
-            		}
 
-            		//Mutation
-            		Offspring[0] = Genetic.mutate(Offspring[0],mutateP, rand);
-            		Offspring[1] = Genetic.mutate(Offspring[1],mutateP, rand);
+        //don't mutate last of selected if we're using elitism
+        int subPopSize = popSize;
+        if (selection==1){
+            subPopSize -= selParam;
+        }
+        int prisonersReplaced = 0;
 
-            		//Replacement - we are done with parents d & d+1, so just replace with children without
-            		// creating an entire new array
-            		Selected[d] = new Prisoner(Offspring[0]);
-            		Selected[d+1] = new Prisoner(Offspring[1]);
-      	    }
+      	for (int d=0; d<subPopSize; d+=2) {
+
+              // in case of odd population, just mutate and replace last individual
+                if (d+1 >= subPopSize){
+              		Offspring[0] = Genetic.mutate(Selected[d].getStrat(), mutateP, rand);
+              		Selected[d] = new Prisoner(Offspring[0]);
+                  prisonersReplaced ++;
+                }
+        	      else {
+                		if(rand.nextDouble() <= crossP) //Cross Over
+                		    Offspring = Genetic.crossover(Selected[d].getStrat(),Selected[d+1].getStrat(), rand);
+                		else { //clones
+                  			Offspring[0] = (BitSet)Selected[d].getStrat().clone();
+                  			Offspring[1] = (BitSet)Selected[d+1].getStrat().clone();
+                		}
+
+                		//Mutation
+                		Offspring[0] = Genetic.mutate(Offspring[0],mutateP, rand);
+                		Offspring[1] = Genetic.mutate(Offspring[1],mutateP, rand);
+
+                		//Replacement - we are done with parents d & d+1, so just replace with children without
+                		// creating an entire new array
+                		Selected[d] = new Prisoner(Offspring[0]);
+                		Selected[d+1] = new Prisoner(Offspring[1]);
+                    prisonersReplaced ++;
+                    prisonersReplaced ++;
+        	    }
       	}
+        if (subPopSize != popSize){
+           for (int d=subPopSize; d<popSize; d+=1){
+              Selected[d] = new Prisoner((BitSet)Selected[d].getStrat().clone());
+              prisonersReplaced ++;
+           }
+        }
+
       	// pass on children pop to be parents of next gen
       	curPopulation = Selected;
       	repaint();	//update display (if any)
@@ -169,7 +317,7 @@ public class Breeder extends JPanel
       	int currentHeight = getHeight() - insets.top - insets.bottom;
 
       	//Display a series of rectangles, representing the players
-      	for(int i = 0; i < popSize; i) {
+      	for(int i = 0; i < popSize; i++) {
     	    	g.setColor(curPopulation[i].getColor());
     	    	g.fillRect((x0*2)+((currentWidth/popSize)*(i)),(currentHeight/4)+y0,(currentWidth/popSize),currentHeight/2);
 	    }

@@ -5,7 +5,7 @@ import java.util.Random;
 import java.awt.Color;
 
 /**
- *This class represents a Prisoner with a strategy to play the 
+ *This class represents a Prisoner with a strategy to play the
  *Prisoner's Dilemma {@link  ie.errity.pd.Game Game}.
  *@author	Andrew Errity 99086921
  * @author      Sherri Goings (modified 4/4/2017)
@@ -13,14 +13,14 @@ import java.awt.Color;
 public class Prisoner implements Cloneable
 {
     private String name;
-    
+
     // array with 71 booleans (True->Cooperate, False->Defect)
     // 1st 7 reserved for 1st 3 rounds, final 64 for all combinations of actions on previous 3 rounds
-    final private BitSet Strategy;  
-	
+    final private BitSet Strategy;
+
     private int Score; 	//total payoffs recieved
     private Moves m;	//table used to decode strategy
-	
+
     /**
      *Create a new Prisoner to play the prisoners dilemma
      *@param na 	the Prisoner's name
@@ -29,11 +29,11 @@ public class Prisoner implements Cloneable
     public Prisoner(String na, BitSet strat)
     {
 	name = na;
-	Strategy = strat;		
+	Strategy = strat;
 	Score= 0;
 	m = new Moves();
     }
-	
+
     /**
      *Create a new Prisoner to play the prisoners dilemma
      *@param na 	the Prisoner's name
@@ -48,12 +48,12 @@ public class Prisoner implements Cloneable
 		if(strat.charAt(i) == 'C')
 		    strat2.set(i);
 	    }
-		
-	Strategy = strat2;		
+
+	Strategy = strat2;
 	Score= 0;
      	m = new Moves();
     }
-	
+
     /**
      *Create a new Prisoner to play the prisoners dilemma (nameless)
      *@param strat a <code>BitSet</code> representing the player's strategy
@@ -61,12 +61,12 @@ public class Prisoner implements Cloneable
     public Prisoner(BitSet strat)
     {
 	name = null;
-	Strategy = strat;			
+	Strategy = strat;
 	Score = 0;
      	m = new Moves();
     }
-	
-	
+
+
     /**
      *Create a 	Predefined Prisoner
      *@param s 	the name of a predefined prisoner <BR> Valid values include:
@@ -81,7 +81,7 @@ public class Prisoner implements Cloneable
     {
 	BitSet temp = new BitSet(71);
 	name = s;
-	if(s.equals("TFT"))		
+	if(s.equals("TFT"))
 	    {
 		//Tit for Tat
 		//Only Defect if opponent defected on the previous move
@@ -92,8 +92,8 @@ public class Prisoner implements Cloneable
 		for(int i = 7; i < 71;i+=2) //set strategy
 		    temp.set(i);
 		Strategy = temp;
-	    }	
-	else if(s.equals("TF2T") || s.equals("TFTT"))		
+	    }
+	else if(s.equals("TF2T") || s.equals("TFTT"))
 	    {
 		//Tit for Two Tats
 		//Only Defect if opponent defected on the two previous moves
@@ -106,8 +106,8 @@ public class Prisoner implements Cloneable
 			temp.clear(i-2);
 		    }
 		Strategy = temp;
-			
-	    }	
+
+	    }
 	else if(s.equals("ALLC"))
 	    {
 		temp.set(0,71); //set all bits (all C)
@@ -118,13 +118,13 @@ public class Prisoner implements Cloneable
 		temp.clear(0,71); //clear all bits (all D)
 		Strategy = temp;
 	    }
-	else 
+	else
 	    Strategy = null;
-		
+
 	Score= 0;
 	m = new Moves();
     }
-	
+
     /**
      *Adds value to the Prisoner's current score
      *@param s the value to be added
@@ -135,13 +135,13 @@ public class Prisoner implements Cloneable
 	Score = s + Score;
 	return Score;
     }
-	
+
     /**
      *Returns the Prisoner's current score
      *@return the Prisoner's current score
      */
-    public int getScore(){return Score;} 
-	
+    public int getScore(){return Score;}
+
     /**
      *Set the Prisoner's current score
      *@param s the new score
@@ -150,20 +150,20 @@ public class Prisoner implements Cloneable
     {
 	Score = s;
     }
-	
+
     /**
      *Returns the Prisoner's name
      *@return the Prisoner's name
      */
     public String getName(){return name;}
-	
+
     /**
      *Returns the Prisoner's strategy
      *@return a <code>BitSet</code> representing the strategy
      */
     public BitSet getStrat(){return Strategy;}
-	
-	
+
+
     /**
      *Gets the Prisoner's next game move
      *@param iteration	 current iteration number
@@ -184,21 +184,21 @@ public class Prisoner implements Cloneable
 		if(History.get(1)) //opponent Cooperated
 		    return Strategy.get(1);
 		else //opponent Defected
-		    return Strategy.get(2);	 	
+		    return Strategy.get(2);
 	    }
 	// if third move
 	else if(iteration == 2)
 	    {
 		if(History.get(1) && History.get(3)) //opponent CC
-		    return Strategy.get(3);	 
+		    return Strategy.get(3);
 		else if(History.get(1) && !History.get(3)) //opponent CD
-		    return Strategy.get(4);	 
+		    return Strategy.get(4);
 		else if(!History.get(1) && History.get(3)) //opponent DC
-		    return Strategy.get(5);	 
+		    return Strategy.get(5);
 		else if(!History.get(1) && !History.get(3)) ////opponent DD
-		    return Strategy.get(6);	 
+		    return Strategy.get(6);
 	    }
-	// if normal move use normal strategy 
+	// if normal move use normal strategy
 	else
 	    {
 		//Get last 3 sets of moves, look up associated index in moves table,
@@ -209,7 +209,7 @@ public class Prisoner implements Cloneable
 	    }
 	return false;
     }
-	
+
     /**
      *Copy the current Prisoner
      *@return a copy of the current Prisoner
@@ -227,13 +227,13 @@ public class Prisoner implements Cloneable
 	    }
         return self;
     }
-    
+
     /**
      *Convert the Prisoner's strategy to a string of C's and D's
      *@return a string representation of the Prisoner's strategy
      */
     public String toString()
-    {	
+    {
 	String p = new String();
 	for(int i = 0; i < 71; i++)
 	    {
@@ -244,7 +244,7 @@ public class Prisoner implements Cloneable
 	    }
 	return p;
     }
-	
+
     /**
      *Returns a Prisoner with a random strategy
      *@return a Prisoner with a random strategy
@@ -257,7 +257,7 @@ public class Prisoner implements Cloneable
 	    rand = new Random();
 	else
 	    rand = new Random(seed);
-		
+
 	//build random player
 	ra = new BitSet(71);
 	for(int i = 0; i < 71;i++) //set strategy
@@ -269,7 +269,7 @@ public class Prisoner implements Cloneable
 	    }
 	return new Prisoner(ra);
     }
-	
+
     /**
      *Returns an array of Prisoners with random strategies
      *@param num_players the number of Prisoners to create
@@ -290,17 +290,18 @@ public class Prisoner implements Cloneable
 		ra = new BitSet(71);
 		for(int i = 0; i < 71;i++) //set strategy
 		    {
-			if(rand.nextBoolean())
-			    ra.set(i);
-			else
-			    ra.clear(i);
+			// if(rand.nextBoolean())
+			//     ra.set(i);
+			// else
+			//     ra.clear(i);
+            ra.clear(i);
 		    }
 		Players[j] = new Prisoner(ra);
-			
+
 	    }
 	return Players;
     }
-	
+
     /**
      *Returns a 2D array of Prisoners with random strategies
      *@param num_players the length of array to return
@@ -329,19 +330,19 @@ public class Prisoner implements Cloneable
 				    ra.clear(i);
 			    }
 			Players[f][j] = new Prisoner(ra);
-				
+
 		    }
 	    }
 	return Players;
     }
-	
-	
+
+
     /**
      *Return which color to render the prisoner (based on it's strategy)
      *<BR>In order to differentiate between different 'types' of player
      *this method sets color according to how often the Prisoner will
      *cooperate and how often they defect
-     *<UL>	
+     *<UL>
      *<LI>Orange/Red signifies defecting ('nasty') strategies</LI>
      *<LI>Yellow/Green signifies cooperating ('nice') strategies</LI>
      *<LI>Blue indicates balanced strategies</LI>
@@ -350,7 +351,7 @@ public class Prisoner implements Cloneable
      */
     public Color getColor()
     {
-	// card = num bits = 1 (cooperate)	
+	// card = num bits = 1 (cooperate)
 	double card = Strategy.cardinality();
 	card = card/71;
 	if(card > .65)
@@ -368,12 +369,12 @@ public class Prisoner implements Cloneable
 	else if(card > .35)
 	    return new Color(0xFF,0x24,0x00);	//ORANGE RED
 	else
-	    return new Color(0x8C,0x17,0x17);	//SCARLET 
+	    return new Color(0x8C,0x17,0x17);	//SCARLET
     }
-	
+
     /**
      *Return the strategy 'type' of the prisoner
-     *<UL>	
+     *<UL>
      *<LI>0,1,2 signifies defecting ('nasty') strategies</LI>
      *<LI>5,6,7 signifies cooperating ('nice') strategies</LI>
      *<LI>3,4  indicates balanced strategies</LI>
@@ -386,22 +387,20 @@ public class Prisoner implements Cloneable
 	double card = Strategy.cardinality();
 	card = card/71;
 	if(card > .65)
-	    return 0; 
+	    return 0;
 	else if(card > .6)
-	    return 1; 
+	    return 1;
 	else if(card > .55)
-	    return 2; 
+	    return 2;
 	else if(card > .5)
-	    return 3; 
+	    return 3;
 	else if(card > .45)
-	    return 4;	
+	    return 4;
 	else if(card > .4)
-	    return 5;	
+	    return 5;
 	else if(card > .35)
 	    return 6;
 	else
-	    return 7;	
+	    return 7;
     }
 }
-			 
-

@@ -23,6 +23,12 @@ Tartarus2
 
 
 
+
+
+
+
+
+
 === notes for report ===
 Description of custom moves
 - attempt to navigate to a corner.
@@ -39,8 +45,27 @@ Description of custom moves
   remaining opposing edges. This should attempt to get blocks in the corner
   especially if the grid is sparsely populated.
 
+
+Equal distribution result:
+80 Moves: 9.036
+160 Moves: 8.295
+
+Weighted distribution result:
+80 Moves: 8.558
+160 Moves: 7.372
+
+Memory result:
+80 Moves: 8.834
+160 Moves: 7.879
+
+Custom moves result:
+80 Moves: 7.256
+160 Moves: 7.031
+
+================================================================================
 Tartarus 1
 T1 EXP1
+================================================================================
 Max fitnesses across 10 runs (80 steps)
 t1:  8.75
 t2:  8.50
@@ -73,3 +98,41 @@ operations in the beginning, and does nothing for the rest of the remaining
 moves. Since all of the score-changing moves are performed in the first 20 or
 so steps, increasing the number steps did not help (when all other settings
 were kept at default.)
+
+================================================================================
+T1 EXP2: added a new node that evaluates to 0, 1, 2 with equal distribution
+================================================================================
+
+Max fitnesses across 10 runs (80 steps)
+t21: 6.55
+t22: 6.90
+t23: 6.70
+t24: 6.95
+t25: 6.45
+t26: 6.05
+t27: 6.45
+t28: 6.80
+t29: 6.50
+t30: 6.40
+average: 6.575
+
+Max fitnesses across 10 runs (160 steps)
+t31: 5.80
+t32: 4.60
+t33: 4.85
+t34: 4.70
+t35: 4.65
+t36: 5.05
+t37: 4.65
+t38: 4.65
+t39: 4.45
+t40: 4.75
+average: 4.815
+
+These are better than random, and also better than our custom scheme. They seem
+to get better when they are allowed more moves, probably because they have more
+random moves that happen to reduce score.
+
+================================================================================
+T1 EXP3
+================================================================================

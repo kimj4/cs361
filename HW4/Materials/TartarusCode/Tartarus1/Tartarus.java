@@ -1,15 +1,15 @@
 // gpjpp example program
 // Copyright (c) 1997, Kim Kokkonen
 //
-// This program is free software; you can redistribute it and/or 
-// modify it under the terms of version 2 of the GNU General Public 
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of version 2 of the GNU General Public
 // License as published by the Free Software Foundation.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,15 +26,15 @@ import gpjpp.*;
 class Tartarus extends GPRun {
 
     //must override GPRun.createVariables to return lawn-specific variables
-    protected GPVariables createVariables() { 
-        return new TartVariables(); 
+    protected GPVariables createVariables() {
+        return new TartVariables();
     }
 
-    //must override GPRun.createNodeSet to return 
+    //must override GPRun.createNodeSet to return
     //  initialized set of functions & terminals
     protected GPAdfNodeSet createNodeSet(GPVariables cfg) {
- 
-        GPNodeSet ns0 = new GPNodeSet(18);
+
+        GPNodeSet ns0 = new GPNodeSet(19);
 
         //MAIN TREE
         ns0.putNode(new GPNode(Grid.ZERO, "zero"));
@@ -56,15 +56,17 @@ class Tartarus extends GPRun {
         ns0.putNode(new GPNode(Grid.MIN, "min", 2));
         ns0.putNode(new GPNode(Grid.ITE, "ite", 3));
 
+        ns0.putNode(new GPNode(Grid.RAND, "rand"));
+
 	// ADF - Do NOT change
 	GPAdfNodeSet adfNs = new GPAdfNodeSet(1);
 	adfNs.put(0, ns0);
         return adfNs;
     }
 
-    //must override GPRun.createPopulation to return 
+    //must override GPRun.createPopulation to return
     //  lawn-specific population
-    protected GPPopulation createPopulation(GPVariables cfg, 
+    protected GPPopulation createPopulation(GPVariables cfg,
         GPAdfNodeSet adfNs) {
         return new TartPopulation(cfg, adfNs);
     }

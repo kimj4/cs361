@@ -1,15 +1,15 @@
 // Implementation of Tartarus Problem
 // Author: Sherri Goings
 //
-// This program is free software; you can redistribute it and/or 
-// modify it under the terms of version 2 of the GNU General Public 
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of version 2 of the GNU General Public
 // License as published by the Free Software Foundation.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -47,16 +47,16 @@ public class TartGene extends GPGene {
 
         int arg1, arg2, arg3, result;
         switch (node.value()) {
-            
+
         case Grid.ZERO:
             return 0;
-            
-        case Grid.ONE: 
+
+        case Grid.ONE:
             return 1;
-            
-        case Grid.TWO: 
+
+        case Grid.TWO:
             return 2;
-            
+
         case Grid.UR:
             return cfg.dozerGrid.sensor(1, -1);
 
@@ -85,7 +85,7 @@ public class TartGene extends GPGene {
             return ( ( (TartGene)get(0) ).evaluate(cfg, gp) + 1) % 3;
 
         case Grid.DEC:
-            result = ( (TartGene)get(0) ).evaluate(cfg, gp) - 1;  
+            result = ( (TartGene)get(0) ).evaluate(cfg, gp) - 1;
             if (result<0) result = 2;
             return result % 3;
 
@@ -117,6 +117,19 @@ public class TartGene extends GPGene {
             arg3 = ( (TartGene)get(2) ).evaluate(cfg, gp);
             if (arg1 == 0) return arg3;
             else return arg2;
+
+        case Grid.RAND:
+            Random r = new Random();
+            double ranNum = r.nextDouble();
+            if (ranNum < (1.0 / 3.0)) {
+                return 0;
+            } else if (ranNum < (2.0 / 3.0)) {
+                return 1;
+            } else {
+                return 2;
+            }
+
+
 
         default:
             throw new RuntimeException("Undefined function type "+node.value());

@@ -35,7 +35,7 @@ public class Grid {
 
     // if no seed given, use -1 for cur time
     public Grid(int xdim, int ydim, int numBoxes) {
-	this(xdim, ydim, numBoxes, -1);
+	     this(xdim, ydim, numBoxes, -1);
     }
 
     // create a Grid of characters with the given dimensions and number of boxes
@@ -53,7 +53,6 @@ public class Grid {
 	// create rand generator (if seed is -1, use time instead)
 	if (seed == -1) rgen = new Random();
 	else rgen = new Random(seed);
-
         initGrid();
     }
 
@@ -65,22 +64,20 @@ public class Grid {
         int remLocs = (xdim-2)*(ydim-2);
         int x=1, y=1;
         while (toPlace > 0) {
-
-            // the probability that this square should get a block is
-	    // (blocks still to place) / (squares not yet considered)
-	    // Note that this probability will grow to 1 when there are only as
-	    // many squares left as there are blocks to place.
-            double p = (double)toPlace/remLocs;
-            if (rgen.nextDouble() < p) {
-		// only place if won't create a 2x2 square of blocks
-		// if p is 1, place block even if creates square, so as to avoid infinitie loop
-                if (grid[x-1][y]!='b' || grid[x][y-1]!='b' || grid[x-1][y-1]!='b' || p>=.99) {
-                    grid[x][y] = 'b';
-		    toPlace--;
-		}
-            }
+          // the probability that this square should get a block is
+	        // (blocks still to place) / (squares not yet considered)
+	        // Note that this probability will grow to 1 when there are only as
+	        // many squares left as there are blocks to place.
+          double p = (double)toPlace/remLocs;
+          if (rgen.nextDouble() < p) {
+		          // only place if won't create a 2x2 square of blocks
+		          // if p is 1, place block even if creates square, so as to avoid infinitie loop
+              if (grid[x-1][y]!='b' || grid[x][y-1]!='b' || grid[x-1][y-1]!='b' || p>=.99) {
+                grid[x][y] = 'b';
+		            toPlace--;
+		          }
+          }
             remLocs--;
-
             // at end of each row, move to beginning of next row
             if (++x == xdim-1) {
                 x=1;

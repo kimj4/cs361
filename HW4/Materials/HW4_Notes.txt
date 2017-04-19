@@ -1,0 +1,75 @@
+Tartarus description notes
+Fitness
+origFit = # of block edges touching a wall
+Max fitness
+if fewer than 4 blocks
+  maxFit = 2 * num blocks
+if 4 or more blocks
+  maxFit = 4 + num blocks
+now we are trying to minimize fitness
+fitness = maxFit - origFit + 1
+
+
+Tartarus1
+  implementation based on terminals + functions in tables 10.1, 10.2
+
+Tartarus2
+  terminals: left, right, forward
+  functions: if/elif/else with 3 children one of which will be evaluated
+  if sensor 0 (empty cell): eval left child
+  if sensor 1 (box cell): eval middle child
+  if sensor 2 (wall cell): eval right child
+  one tree evaluated completely before restarting at root
+
+
+
+=== notes for report ===
+Description of custom moves
+- attempt to navigate to a corner.
+  - do by forward x 5, right, forward x5, right (to set up for next)
+- snake across the board
+  - forward x5
+  - right
+  - forward
+  - right
+  - forward x5
+  - repeat
+- this will do better than random because theoretically, we are pushing all of
+  the blocks to two opposing edges of the grid. Then we push all of those to the
+  remaining opposing edges. This should attempt to get blocks in the corner
+  especially if the grid is sparsely populated.
+
+Tartarus 1
+T1 EXP1
+Max fitnesses across 10 runs (80 steps)
+t1:  8.75
+t2:  8.50
+t3:  8.60
+t4:  8.50
+t5:  8.60
+t6:  8.60
+t7:  9.00
+t8:  8.55
+t9:  8.90
+t10: 8.40
+average: 8.64
+
+Max fitnesses across 10 runs (160 steps)
+t11: 8.60
+t12: 8.90
+t13: 8.80
+t14: 9.10
+t15: 8.60
+t16: 8.15
+t17: 8.65
+t18: 9.05
+t19: 8.65
+t20: 8.75
+average: 8.725
+
+Increasing the number of allowed steps does not seem to help.
+Looking at the simulations, it seems that the dozer performs all of its
+operations in the beginning, and does nothing for the rest of the remaining
+moves. Since all of the score-changing moves are performed in the first 20 or
+so steps, increasing the number steps did not help (when all other settings
+were kept at default.)

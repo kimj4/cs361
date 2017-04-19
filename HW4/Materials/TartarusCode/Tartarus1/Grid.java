@@ -5,22 +5,22 @@ public class Grid {
 
     //functions and terminals
     public final static int ZERO = 0;
-    public final static int ONE = 1; 
-    public final static int TWO = 2; 
-    public final static int UR = 3;  
+    public final static int ONE = 1;
+    public final static int TWO = 2;
+    public final static int UR = 3;
     public final static int MR = 4;
-    public final static int LR = 5;  
-    public final static int UM = 6;  
-    public final static int LM = 7;  
-    public final static int UL = 8;   
-    public final static int ML = 9;   
-    public final static int LL = 10;  
-    public final static int INC = 11;  
-    public final static int DEC = 12;  
-    public final static int ADD = 13;  
-    public final static int SUB = 14;  
-    public final static int MAX = 15;  
-    public final static int MIN = 16;  
+    public final static int LR = 5;
+    public final static int UM = 6;
+    public final static int LM = 7;
+    public final static int UL = 8;
+    public final static int ML = 9;
+    public final static int LL = 10;
+    public final static int INC = 11;
+    public final static int DEC = 12;
+    public final static int ADD = 13;
+    public final static int SUB = 14;
+    public final static int MAX = 15;
+    public final static int MIN = 16;
     public final static int ITE = 17;
 
 
@@ -37,7 +37,7 @@ public class Grid {
     public Grid(int xdim, int ydim, int numBoxes) {
 	this(xdim, ydim, numBoxes, -1);
     }
-    
+
     // create a Grid of characters with the given dimensions and number of boxes
     public Grid(int xdim, int ydim, int numBoxes, int seed) {
         this.xdim = xdim;
@@ -49,7 +49,7 @@ public class Grid {
         for (int i=0; i<xdim; i++)
             for (int j=0; j<ydim; j++)
                 grid[i][j] = ' ';
-	
+
 	// create rand generator (if seed is -1, use time instead)
 	if (seed == -1) rgen = new Random();
 	else rgen = new Random(seed);
@@ -65,7 +65,7 @@ public class Grid {
         int remLocs = (xdim-2)*(ydim-2);
         int x=1, y=1;
         while (toPlace > 0) {
-	    
+
             // the probability that this square should get a block is
 	    // (blocks still to place) / (squares not yet considered)
 	    // Note that this probability will grow to 1 when there are only as
@@ -80,14 +80,14 @@ public class Grid {
 		}
             }
             remLocs--;
-	    
+
             // at end of each row, move to beginning of next row
             if (++x == xdim-1) {
                 x=1;
                 y++;
             }
         }
-	
+
         // place dozer in random start location
         x = rgen.nextInt(xdim-2) + 1;
         y = rgen.nextInt(ydim-2) + 1;
@@ -98,7 +98,7 @@ public class Grid {
             if (grid[x+1][y] != 'b') x++;
             else if (grid[x][y+1] != 'b') y++;
             else {
-                x++; 
+                x++;
                 y++;
             }
         }
@@ -135,7 +135,7 @@ public class Grid {
         if (--dozerFacing < 0) dozerFacing = 3;
         if (out != null) updateFile(out, dozerX, dozerY, dozerFacing);
     }
-    
+
    // if no out file specified, use null
     public void forward() {
 	forward(null);
@@ -164,7 +164,7 @@ public class Grid {
             frontY++;
             forw2Y += 2;
         }
-	
+
         // if facing wall, do nothing
         if (frontX<0 || frontX >= xdim || frontY<0 || frontY>=ydim) {
             //record that step spent not moving
@@ -172,7 +172,7 @@ public class Grid {
             return;
         }
 
-        // if facing block 
+        // if facing block
         if (grid[frontX][frontY] == 'b') {
             // if has wall or another block behind it, do nothing
             if (forw2X<0 || forw2X>=xdim || forw2Y<0 || forw2Y>=ydim || grid[forw2X][forw2Y]=='b') {
@@ -180,7 +180,7 @@ public class Grid {
 		if (out != null) updateFile(out, dozerX, dozerY, dozerFacing);
                 return;
             }
-	    
+
             // if clear behind block, move block
 	    grid[forw2X][forw2Y] = 'b';
 
@@ -192,7 +192,7 @@ public class Grid {
 		    System.out.println("Error while writing to file in forward method");
 		}
 	    }
- 
+
         }
         // if here were either facing block with nothing behind it or empty space so will move dozer
 	// record move
@@ -203,7 +203,7 @@ public class Grid {
 		System.out.println("Error while writing to file in forward method");
 	    }
 	}
-	
+
 	// dozer moves
         grid[frontX][frontY] = 'D';
         grid[dozerX][dozerY] = ' ';
@@ -211,14 +211,14 @@ public class Grid {
         dozerY = frontY;
 
 	if (out!= null) updateFile(out, dozerX, dozerY, dozerFacing);
-	
+
 
     }
 
     // frontOffset is 1 for square in front of dozer, 0 for inline with dozer, and -1 for behind
     // sideOffset is 1 for left of dozer, 0 inline, -1 right
     // y goes from 0 at the top to max val at the bottom of grid/screen
-    // returns 0,1, or 2 for empty, box, wall respectively 
+    // returns 0,1, or 2 for empty, box, wall respectively
     public int sensor(int frontOffset, int sideOffset) {
         // determine the appropriate square to check if is empty, wall, or box
         int checkX=-1, checkY=-1;
@@ -241,7 +241,7 @@ public class Grid {
 
         // if box to check is out of bounds, return 2 for wall
         if (checkX < 0 || checkY < 0 || checkX >= xdim || checkY >= ydim) return 2;
-        
+
         // otherwise 0 for empty and 1 for box
         if (grid[checkX][checkY] == 'b') return 1;
         else return 0;
@@ -254,23 +254,23 @@ public class Grid {
         int maxFit = 0;
         if (numBoxes>=4) maxFit = numBoxes+4;
         else maxFit = numBoxes*2;
-        
+
         // increase fitness if find boxes in first or last col
         int i=0;
-        for (int j=0; j<ydim; j++) 
+        for (int j=0; j<ydim; j++)
             if (grid[i][j] == 'b') fit++;
         i=xdim-1;
-        for (int j=0; j<ydim; j++) 
+        for (int j=0; j<ydim; j++)
             if (grid[i][j] == 'b') fit++;
 
-        // increase fitness for boxes in first or last row, note that 
-        // boxes in the corner will have fitness increased twice which 
+        // increase fitness for boxes in first or last row, note that
+        // boxes in the corner will have fitness increased twice which
         // correctly gives them their bonus of 2 instead of 1.
         i=0;
-        for (int j=0; j<xdim; j++) 
+        for (int j=0; j<xdim; j++)
             if (grid[j][i] == 'b') fit++;
         i=ydim-1;
-        for (int j=0; j<xdim; j++) 
+        for (int j=0; j<xdim; j++)
             if (grid[j][i] == 'b') fit++;
 
         return maxFit + 1 - fit;
@@ -280,7 +280,7 @@ public class Grid {
         print(System.out);
     }
 
-    // print the current state of the grid, showing blocks and the dozer 
+    // print the current state of the grid, showing blocks and the dozer
     // pointing in the correct direction
     public void print(PrintStream os) {
         for (int y=0; y<ydim; y++) {
@@ -342,11 +342,11 @@ public class Grid {
             System.out.println("Error while writing to file in fitness method");
         }
     }
-    
+
     public static void main(String[] args) {
-        
+
         try {
-            
+
             File file = new File("outputFile.txt");
             if (!file.exists()) {
                file.createNewFile();
@@ -366,12 +366,16 @@ public class Grid {
             } else {
                 System.out.println("use eq, w, mem, or man to run equal, weighted, memory, or manual tests");
             }
-        
+
         } catch (IOException ioe){
-                
+
         }
     }
-    
+
+    /**
+     * Forward, Right, and Left have an equal probability of happening
+     * prints results to stdout
+    */
     public static void runEqualTests(BufferedWriter bw){
         Random rgen = new Random();
         float rand = 0;
@@ -383,7 +387,7 @@ public class Grid {
             grid = new Grid(6,6,5,rgen.nextInt());
             for (int move=0; move<80; move++){
                 rand = rgen.nextFloat();
-                
+
                 if (rand <1.0/3){
                     grid.forward();
                 } else if (rand < 2.0/3){
@@ -395,15 +399,13 @@ public class Grid {
             averageFitness80 += grid.calcFitness();
         }
         averageFitness80=averageFitness80/1000.0;
-        //grid.outputFitness(bw,averageFitness80);
-        System.out.println("Fitness 80: " + averageFitness80);
-        
+
         for (int run=0; run<1000; run++){
             //make random grid
             grid = new Grid(6,6,5,rgen.nextInt());
             for (int move=0; move<160; move++){
                 rand = rgen.nextFloat();
-                
+
                 if (rand <1.0/3){
                     grid.forward();
                 } else if (rand < 2.0/3){
@@ -415,9 +417,15 @@ public class Grid {
             averageFitness160 += grid.calcFitness();
         }
         averageFitness160=averageFitness160/1000.0;
-        System.out.println("Fitness 160: " + averageFitness160);
+        System.out.println("Equal distribution result: ");
+        System.out.println("80 Moves: " + averageFitness80);
+        System.out.println("160 Moves: " + averageFitness160);
     }
-    
+
+    /**
+     * Forward has 60% chance, and left and rigth each have 20%
+     * prints results to stdout
+    */
     public static void runWeightedTests(BufferedWriter bw){
         Random rgen = new Random();
         float rand = 0;
@@ -429,7 +437,7 @@ public class Grid {
             grid = new Grid(6,6,5,rgen.nextInt());
             for (int move=0; move<80; move++){
                 rand = rgen.nextFloat();
-                
+
                 if (rand <.6){
                     grid.forward();
                 } else if (rand < .8){
@@ -440,17 +448,15 @@ public class Grid {
             }
             averageFitness80 += grid.calcFitness();
         }
-        
+
         averageFitness80=averageFitness80/1000.0;
-        //grid.outputFitness(bw,averageFitness80);
-        System.out.println("Fitness 80: " + averageFitness80);
-        
+
                 for (int run=0; run<1000; run++){
             //make random grid
             grid = new Grid(6,6,5,rgen.nextInt());
             for (int move=0; move<160; move++){
                 rand = rgen.nextFloat();
-                
+
                 if (rand <.6){
                     grid.forward();
                 } else if (rand < .8){
@@ -462,9 +468,16 @@ public class Grid {
             averageFitness160 += grid.calcFitness();
         }
         averageFitness160=averageFitness160/1000.0;
-        System.out.println("Fitness 160: " + averageFitness160);
+        System.out.println("Weighted distribution result: ");
+        System.out.println("80 Moves: " + averageFitness80);
+        System.out.println("160 Moves: " + averageFitness160);
     }
-    
+
+    /**
+     * a Left will never follow a Right and a Right will never follow a Left
+     * Forward is not restricted
+     * prints results to stdout
+    */
     public static void runMemoryTests(BufferedWriter bw){
         Random rgen = new Random();
         float rand = 0;
@@ -477,7 +490,7 @@ public class Grid {
             grid = new Grid(6,6,5,rgen.nextInt());
             for (int move=0; move<80; move++){
                 rand = rgen.nextFloat();
-                
+
                 if (rand <1.0/3){
                     grid.forward();
                     lastMove="f";
@@ -500,15 +513,13 @@ public class Grid {
             averageFitness80 += grid.calcFitness();
         }
         averageFitness80=averageFitness80/1000.0;
-        //grid.outputFitness(bw,averageFitness80);
-        System.out.println("Fitness 80: " + averageFitness80);
-        
+
         for (int run=0; run<1000; run++){
             //make random grid
             grid = new Grid(6,6,5,rgen.nextInt());
             for (int move=0; move<160; move++){
                 rand = rgen.nextFloat();
-                
+
                 if (rand <1.0/3){
                     grid.forward();
                     lastMove="f";
@@ -531,9 +542,16 @@ public class Grid {
             averageFitness160 += grid.calcFitness();
         }
         averageFitness160=averageFitness160/1000.0;
-        System.out.println("Fitness 160: " + averageFitness160);
+        System.out.println("Memory result: ");
+        System.out.println("80 Moves: " + averageFitness80);
+        System.out.println("160 Moves: " + averageFitness160);
     }
-    
+    /**
+     * Custom strategy: dozer first attempts to move to a corner, and then
+     * snakes its way through the board.
+     * if there are moves left, snakes in a different direction
+     * prints results to stdout
+    */
     public static void runManualTests(BufferedWriter bw){
         Random rgen = new Random();
         Grid grid;
@@ -558,10 +576,10 @@ public class Grid {
                             r, f, r,
                             f, f, f, f, f,
                             l, f, l,
-                            r}; 
+                            r};
         for (int run = 0; run < 1000; run++) {
             grid = new Grid(6,6,5,rgen.nextInt());
-            for (int move = 0; move < 12 ; move ++) {
+            for (int move = 0; move < cornerMoves.length ; move ++) {
                 if (cornerMoves[move].equals("r")) {
                     grid.right();
                 } else if (cornerMoves[move].equals("l")) {
@@ -570,10 +588,10 @@ public class Grid {
                     grid.forward();
                 }
             }
-            for (int move = 0; move < 80 - 12; move++) {
-                if (moves[move % 43].equals("r")) {
+            for (int move = 0; move < 80 - cornerMoves.length; move++) {
+                if (moves[move % moves.length].equals("r")) {
                     grid.right();
-                } else if (moves[move % 43].equals("l")) {
+                } else if (moves[move % moves.length].equals("l")) {
                     grid.left();
                 } else {
                     grid.forward();
@@ -582,11 +600,10 @@ public class Grid {
             averageFitness80 += grid.calcFitness();
         }
         averageFitness80 = averageFitness80 / 1000.0;
-        System.out.println("Average fitness 80: " + averageFitness80);
-        
+
         for (int run = 0; run < 1000; run++) {
             grid = new Grid(6,6,5,rgen.nextInt());
-            for (int move = 0; move < 12 ; move ++) {
+            for (int move = 0; move < cornerMoves.length ; move ++) {
                 if (cornerMoves[move].equals("r")) {
                     grid.right();
                 } else if (cornerMoves[move].equals("l")) {
@@ -595,11 +612,11 @@ public class Grid {
                     grid.forward();
                 }
             }
-            
-            for (int move = 0; move < 160 - 12; move++) {
-                if (moves[move % 43].equals("r")) {
+
+            for (int move = 0; move < 160 - cornerMoves.length; move++) {
+                if (moves[move % moves.length].equals("r")) {
                     grid.right();
-                } else if (moves[move % 43].equals("l")) {
+                } else if (moves[move % moves.length].equals("l")) {
                     grid.left();
                 } else {
                     grid.forward();
@@ -608,6 +625,8 @@ public class Grid {
             averageFitness160 += grid.calcFitness();
         }
         averageFitness160 = averageFitness160 / 1000.0;
-        System.out.println("Average fitness 160: " + averageFitness160);
+        System.out.println("Custom moves result: ");
+        System.out.println("80 Moves: " + averageFitness80);
+        System.out.println("160 Moves: " + averageFitness160);
     }
 }

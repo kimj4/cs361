@@ -1,0 +1,15 @@
+Equal distribution result:
+80 Moves: 9.036
+160 Moves: 8.295
+
+Weighted distribution result:
+80 Moves: 8.558
+160 Moves: 7.372
+
+Memory result:
+80 Moves: 8.834
+160 Moves: 7.879
+
+Custom moves result:
+80 Moves: 7.256
+160 Moves: 7.031

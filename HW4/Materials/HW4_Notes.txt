@@ -134,5 +134,133 @@ to get better when they are allowed more moves, probably because they have more
 random moves that happen to reduce score.
 
 ================================================================================
-T1 EXP3
+T1 EXP3             NumSteps = 160
 ================================================================================
+t41 - t50
+CrossoverProbability      = 50.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+TournamentSize            = 5
+DemeSize                  = 100
+DemeticMigProbability     = 100.0
+SwapMutationProbability   = 10.0
+*** ShrinkMutationProbability = 50.0
+
+t41 5.50 
+    4.90 
+    5.50
+    4.95 
+    5.05 
+    4.75   
+    5.60 
+    4.55 
+    5.25   
+t50 4.90
+
+t51 - 60
+**** CrossoverProbability      = 100.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+TournamentSize            = 5
+DemeSize                  = 100
+DemeticMigProbability     = 100.0
+SwapMutationProbability   = 10.0
+ShrinkMutationProbability = 10.0
+
+t51 4.55
+    5.35
+    5.00 
+    5.20
+    4.75
+    5.10
+    4.25 
+    4.90
+    4.85 
+t60 5.20 
+
+t51-60
+CrossoverProbability      = 50.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+TournamentSize            = 5
+DemeSize                  = 5
+DemeticMigProbability     = 100.0
+*** SwapMutationProbability   = 30.0
+*** ShrinkMutationProbability = 30.0
+
+t61 4.55
+    4.55
+    5.25 
+    4.65
+    5.45
+    5.15
+    4.75
+    4.50 
+    5.35
+t70 5.05
+
+t71-80
+CrossoverProbability      = 50.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+*** TournamentSize            = 2
+DemeSize                  = 5
+DemeticMigProbability     = 100.0
+SwapMutationProbability   = 10.0
+ShrinkMutationProbability = 10.0
+
+t71 6.10
+    5.05
+    5.50
+    5.10 
+    5.15 
+    5.05
+    5.90
+    5.35
+    5.45
+t80 5.20 
+
+================================================================================
+T1 EXP4             NumSteps = 160
+================================================================================
+
+(creation 8, crossover 16, complexity 100)
+5.80, 8.13 seconds
+4.60, 13.34
+4.85, 11.49
+4.70, 16.47
+4.65, 15.22
+5.05, 11.58
+4.65, 11.48
+4.65, 15.02
+4.45, 12.80
+4.75, 14.66
+avg: 4.815, 13.04
+
+(creation 2, cross 4, comp 25)
+avg fit 5.39
+avg time 4.6
+
+(creation 4, 8, 50)
+4.95
+8.84
+
+(16, 32, 200)
+4.775
+30.95

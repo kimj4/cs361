@@ -1,0 +1,38 @@
+=== Tartarus1 ===
+Grid,java
+- added main
+- added 4 base case tests
+- RAND node added
+
+t_e_p_.sh
+- shell scripts that run tests for experiments
+- t1 t2 for tartarus1 and 2
+- e_ to denote experiment number
+- p_ to denote part number (usually for distinguishing 80 and 160 moves)
+
+Tartarus.java
+- rand node is put
+- adjusted the number of node types
+
+TartGene.java
+- added implementation for rand
+
+
+=== Tartarus2 ===
+Grid.java
+- added PROG2
+- added PROG3
+- added and commented out TIF (detect two in front of rover)
+- added ROW (detect if there are any blocks in front of rover)
+
+Tartarus.java
+- added prog2
+- added prog3
+- added and commented out tif
+- added ROW
+
+TartGene.java
+- added implementation for prog2
+- added implementation for prog3
+- added implementation for row
+- children evaluation code changed slightly to accommodate prog2 and prog3

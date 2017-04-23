@@ -1,0 +1,503 @@
+Tartarus description notes
+Fitness
+origFit = # of block edges touching a wall
+Max fitness
+if fewer than 4 blocks
+  maxFit = 2 * num blocks
+if 4 or more blocks
+  maxFit = 4 + num blocks
+now we are trying to minimize fitness
+fitness = maxFit - origFit + 1
+
+
+Tartarus1
+  implementation based on terminals + functions in tables 10.1, 10.2
+
+Tartarus2
+  terminals: left, right, forward
+  functions: if/elif/else with 3 children one of which will be evaluated
+  if sensor 0 (empty cell): eval left child
+  if sensor 1 (box cell): eval middle child
+  if sensor 2 (wall cell): eval right child
+  one tree evaluated completely before restarting at root
+
+
+
+
+
+
+
+
+
+=== notes for report ===
+Description of custom moves
+- attempt to navigate to a corner.
+  - do by forward x 5, right, forward x5, right (to set up for next)
+- snake across the board
+  - forward x5
+  - right
+  - forward
+  - right
+  - forward x5
+  - repeat
+- this will do better than random because theoretically, we are pushing all of
+  the blocks to two opposing edges of the grid. Then we push all of those to the
+  remaining opposing edges. This should attempt to get blocks in the corner
+  especially if the grid is sparsely populated.
+
+
+Equal distribution result:
+80 Moves: 9.036
+160 Moves: 8.295
+
+Weighted distribution result:
+80 Moves: 8.558
+160 Moves: 7.372
+
+Memory result:
+80 Moves: 8.834
+160 Moves: 7.879
+
+Custom moves result:
+80 Moves: 7.256
+160 Moves: 7.031
+
+================================================================================
+Tartarus 1
+T1 EXP1
+================================================================================
+Max fitnesses across 10 runs (80 steps)
+t1:  8.75
+t2:  8.50
+t3:  8.60
+t4:  8.50
+t5:  8.60
+t6:  8.60
+t7:  9.00
+t8:  8.55
+t9:  8.90
+t10: 8.40
+average: 8.64
+
+Max fitnesses across 10 runs (160 steps)
+t11: 8.60
+t12: 8.90
+t13: 8.80
+t14: 9.10
+t15: 8.60
+t16: 8.15
+t17: 8.65
+t18: 9.05
+t19: 8.65
+t20: 8.75
+average: 8.725
+
+Increasing the number of allowed steps does not seem to help.
+Looking at the simulations, it seems that the dozer performs all of its
+operations in the beginning, and does nothing for the rest of the remaining
+moves. Since all of the score-changing moves are performed in the first 20 or
+so steps, increasing the number steps did not help (when all other settings
+were kept at default.)
+
+================================================================================
+T1 EXP2: added a new node that evaluates to 0, 1, 2 with equal distribution
+================================================================================
+
+Max fitnesses across 10 runs (80 steps)
+t21: 6.55
+t22: 6.90
+t23: 6.70
+t24: 6.95
+t25: 6.45
+t26: 6.05
+t27: 6.45
+t28: 6.80
+t29: 6.50
+t30: 6.40
+average: 6.575
+
+Max fitnesses across 10 runs (160 steps)
+t31: 5.80
+t32: 4.60
+t33: 4.85
+t34: 4.70
+t35: 4.65
+t36: 5.05
+t37: 4.65
+t38: 4.65
+t39: 4.45
+t40: 4.75
+average: 4.815
+
+These are better than random, and also better than our custom scheme. They seem
+to get better when they are allowed more moves, probably because they have more
+random moves that happen to reduce score.
+
+================================================================================
+T1 EXP3             NumSteps = 160
+================================================================================
+t41 - t50
+CrossoverProbability      = 50.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+TournamentSize            = 5
+DemeSize                  = 100
+DemeticMigProbability     = 100.0
+SwapMutationProbability   = 10.0
+*** ShrinkMutationProbability = 50.0
+
+t41 5.50
+    4.90
+    5.50
+    4.95
+    5.05
+    4.75
+    5.60
+    4.55
+    5.25
+t50 4.90
+
+t51 - 60
+**** CrossoverProbability      = 100.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+TournamentSize            = 5
+DemeSize                  = 100
+DemeticMigProbability     = 100.0
+SwapMutationProbability   = 10.0
+ShrinkMutationProbability = 10.0
+
+t51 4.55
+    5.35
+    5.00
+    5.20
+    4.75
+    5.10
+    4.25
+    4.90
+    4.85
+t60 5.20
+
+t51-60
+CrossoverProbability      = 50.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+TournamentSize            = 5
+DemeSize                  = 5
+DemeticMigProbability     = 100.0
+*** SwapMutationProbability   = 30.0
+*** ShrinkMutationProbability = 30.0
+
+t61 4.55
+    4.55
+    5.25
+    4.65
+    5.45
+    5.15
+    4.75
+    4.50
+    5.35
+t70 5.05
+
+t71-80
+CrossoverProbability      = 50.0
+CreationProbability       = 0.0
+CreationType              = Grow
+MaximumDepthForCreation   = 8
+MaximumDepthForCrossover  = 16
+MaximumComplexity         = 100
+SelectionType             = Tournament
+*** TournamentSize            = 2
+DemeSize                  = 5
+DemeticMigProbability     = 100.0
+SwapMutationProbability   = 10.0
+ShrinkMutationProbability = 10.0
+
+t71 6.10
+    5.05
+    5.50
+    5.10
+    5.15
+    5.05
+    5.90
+    5.35
+    5.45
+t80 5.20
+
+================================================================================
+T1 EXP4             NumSteps = 160
+================================================================================
+
+(creation 8, crossover 16, complexity 100)
+5.80, 8.13 seconds
+4.60, 13.34
+4.85, 11.49
+4.70, 16.47
+4.65, 15.22
+5.05, 11.58
+4.65, 11.48
+4.65, 15.02
+4.45, 12.80
+4.75, 14.66
+avg: 4.815, 13.04
+
+(creation 2, cross 4, comp 25)
+avg fit 5.39
+avg time 4.6
+
+(creation 4, 8, 50)
+4.95
+8.84
+
+(16, 32, 200)
+4.775
+30.95
+
+
+
+================================================================================
+================================================================================
+Tartarus 2
+================================================================================
+================================================================================
+
+================================================================================
+repeating experiment 1 - run with default
+================================================================================
+80 steps
+t1  8.35
+t2  8.70
+t3  8.55
+t4  8.94
+t5  8.65
+t6  8.84
+t7  8.98
+t8  8.70
+t9  8.80
+t10 9.05
+average: 8.756
+
+
+
+160 steps
+t11 8.75
+t12 8.00
+t13 8.55
+t14 8.45
+t15 9.05
+t16 8.45
+t17 8.55
+t18 8.25
+t19 8.55
+t20 8.70
+average: 8.53
+
+increasing number of steps does not improve outcomes significantly.
+Running the simulation, it is evident that the dozer simply repeats a move
+forever, which is usually simply going forward and never turning
+
+
+================================================================================
+adding PROG2 (evals left child and then right child)
+================================================================================
+80 steps
+t21 4.25
+t22 5.90
+t23 3.95
+t24 5.60
+t25 4.65
+t26 3.90
+t27 5.25
+t28 5.70
+t29 5.35
+t30 5.05
+average 4.96
+
+160 steps
+t31 8.30
+t32 4.25
+t33 5.25
+t34 2.35
+t35 4.65
+t36 7.55
+t37 4.60
+t38 3.80
+t39 4.75
+t40 7.40
+average 5.29
+
+This seems to have improved the results dramatically.
+In 80 steps, the spread was pretty tight, but at 160 steps, the spread became wider.
+It also seems that increasing the number of steps does not help increase
+fitness in general, though our best program with fitness 2.35 was when it was
+allowed 160 steps.
+
+The worst, t31 had prog2 at lower parts of the tree while the best, t34, had
+prog2 at multiple places towards the top, including the root. This probably
+means that the further up a prog2 is, the more moves it is allowed to make,
+hence the higher scores.
+
+
+================================================================================
+adding PROG3 (evals left, middle, right child sequentially)
+================================================================================
+80 steps
+t41 4.10
+t42 4.20
+t43 4.55
+t44 3.45
+t45 6.15
+t46 3.70
+t47 3.50
+t48 4.75
+t49 4.00
+t50 3.35
+average 4.175
+
+160 steps
+t51 3.15
+t52 2.15
+t53 2.20
+t54 3.15
+t55 4.55
+t56 2.65
+t57 3.60
+t58 4.55
+t59 3.85
+t60 2.95
+average 3.28
+
+allowing the sequential evaluation of 3 children seems to have increased the
+overall outcome even more. Here, it seems that allowing more steps improved
+fitness significantly. It also seems that the spread between the fitnesses have
+been closed by a fair bit.
+*** explain why this helps
+
+
+================================================================================
+trying different tree complexity settings (160 steps for all)
+================================================================================
+2,4,25
+t61 5.65
+t62 5.50
+t63 4.50
+t64 4.60
+t65 4.95
+t66 4.30
+t67 3.75
+t68 6.75
+t69 5.30
+t70 6.55
+average 5.185
+
+4,8, 50
+t71 4.95
+t72 1.90
+t73 3.70
+t74 2.10
+t75 2.35
+t76 2.25
+t77 2.95
+t78 2.50
+t79 2.05
+t80 2.30
+average 2.705
+
+DEFAULT
+8, 16, 100
+t51 3.15
+t52 2.15
+t53 2.20
+t54 3.15
+t55 4.55
+t56 2.65
+t57 3.60
+t58 4.55
+t59 3.85
+t60 2.95
+average 3.28
+
+16, 32, 200
+t81 1.95
+t82 1.85
+t83 1.65
+t84 4.35
+t85 2.85
+t86 3.15
+t87 4.75
+t88 3.50
+t89 2.05
+t90 3.15
+average 2.925
+
+The different tree complexities do seem to have some effect on the final scores.
+Generally, the more complex configurations yielded better results, and this is
+probably because programs with more depth are able to perform better in this
+case.
+When depth is limited, the program has no choice but to grow sideways, which is
+not very useful for our purposes.
+
+
+================================================================================
+More sensory information
+================================================================================
+Giving the ability to sense two blocks directly ahead
+t91  3.85
+t92  3.45
+t93  3.20
+t94  4.15
+t95  2.80
+t96  2.30
+t97  3.60
+t98  4.30
+t99  3.80
+t100 1.95
+average 3.34
+
+The addition of this new node does not seem to have improved the final outcome.
+Intuition tells me that it should have, since it should be able to have a longer
+term plan, but this does not seem to be the case.
+
+
+================================================================================
+Change the representation
+================================================================================
+Changes
+- remove the two-in-front sensor
+- add a sensor that tells you if there is a block in the direction that the
+  dozer is facing.
+
+Hypothesis
+- This gives you at most 5 more blocks of information
+- Should not hurt the performance at the very least
+
+t101 1.80
+t102 1.55
+t103 2.60
+t104 2.40
+t105 2.45
+t106 2.40
+t107 2.60
+t108 1.50
+t109 5.45
+t110 2.25
+average 2.5
+
+There seems to be a good improvement over default.
+Upon observing the simulation, it seems to do well, but an observed pitfall is
+that when it sees a block from afar, it will go towards it even if it is already
+against a wall. It is only when it is right next to it that the rover can tell
+that this is the case. This wastes some moves and also often gets the blocks in
+the unmovable 2x2 position. (observed the best result tree)

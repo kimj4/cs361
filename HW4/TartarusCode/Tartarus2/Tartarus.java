@@ -30,7 +30,7 @@ protected GPVariables createVariables() {
 // must override GPRun.createNodeSet to return
 // initialized set of functions & terminals
 protected GPAdfNodeSet createNodeSet(GPVariables cfg) {
-        GPNodeSet ns0 = new GPNodeSet(14);
+        GPNodeSet ns0 = new GPNodeSet(13);
 
         //MAIN TREE
         ns0.putNode(new GPNode(Grid.LFT, "left"));
@@ -49,7 +49,7 @@ protected GPAdfNodeSet createNodeSet(GPVariables cfg) {
         ns0.putNode(new GPNode(Grid.PROG2, "prog2", 2));
         ns0.putNode(new GPNode(Grid.PROG3, "prog3", 3));
         // ns0.putNode(new GPNode(Grid.TIF, "tif", 3));
-        ns0.putNode(new GPNode(Grid.ROW, "row", 2));
+        // ns0.putNode(new GPNode(Grid.ROW, "row", 2));
 
 
         // ADF - Do NOT change

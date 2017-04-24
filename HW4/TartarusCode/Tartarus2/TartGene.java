@@ -98,20 +98,25 @@ int evaluate(TartVariables cfg, TartGP gp, PrintStream os, BufferedWriter out) {
                         result = cfg.dozerGrid.sensor(0, 1);
                 else if (val==Grid.LL)
                         result = cfg.dozerGrid.sensor(-1, 1);
-                else if (val==Grid.ROW) {
-                        for (int i = 0; i < 6; i++) {
-                                if (cfg.dozerGrid.sensor(i,0) == 1) {
-                                        boxInRow = true;
-                                        break;
-                                }
-                        }
-                        if (boxInRow) {
-                                result = 1;
-                        } else {
-                                result = 0;
-                        }
-                }
+
                 // added for homework
+                // if (val==Grid.ROW) {
+                        // for (int i = 0; i < 6; i++) {
+                        //         if (cfg.dozerGrid.sensor(i,0) == 1) {
+                        //                 boxInRow = true;
+                        //                 break;
+                        //         }
+                        // }
+                        // if (boxInRow) {
+                        //         result = 1;
+                        // } else {
+                        //         result = 0;
+                        // }
+                        // if (cfg.dozerGrid.sensor(1,0)==1){
+                        //     ( (TartGene)get(0) ).evaluate(cfg, gp, os, out);
+                        // }
+                        //     ( (TartGene)get(1) ).evaluate(cfg, gp, os, out);
+                // } else 
                 if (val==Grid.PROG2) {
                         ( (TartGene)get(0) ).evaluate(cfg, gp, os, out);
                         ( (TartGene)get(1) ).evaluate(cfg, gp, os, out);

@@ -378,7 +378,7 @@ t70 6.55
 Fitness Average Max: 5.185
 Average Time Per Generation: 0.005
 
-4,8, 50
+  4,8, 50
 t71 4.95
 t72 1.90
 t73 3.70
@@ -406,6 +406,9 @@ t59 3.85
 t60 2.95
 Fitness Average Max: 3.28
 Average Time Per Generation: 0.01
+
+DEFAULT AGAIN
+t121 to t130
 
 16, 32, 200
 t81 1.95

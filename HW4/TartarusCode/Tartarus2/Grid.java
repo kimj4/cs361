@@ -36,7 +36,7 @@ public final static int LL = 10;
 public final static int PROG2 = 11;
 public final static int PROG3 = 12;
 // public final static int TIF = 13; // two in front
-// public final static int ROW = 13;
+public final static int ROW = 13;
 
 // grid private vars
 private char[][] grid;

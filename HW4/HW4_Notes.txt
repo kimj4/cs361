@@ -104,34 +104,18 @@ T1 EXP2: added a new node that evaluates to 0, 1, 2 with equal distribution
 ================================================================================
 
 Max fitnesses across 10 runs (80 steps)
-t21: 6.55
-t22: 6.90
-t23: 6.70
-t24: 6.95
-t25: 6.45
-t26: 6.05
-t27: 6.45
-t28: 6.80
-t29: 6.50
-t30: 6.40
+(6.55, 6.90, 6.70, 6.95, 6.45, 6.05, 6.45, 6.80, 6.50, 6.40)
 average: 6.575
 
 Max fitnesses across 10 runs (160 steps)
-t31: 5.80
-t32: 4.60
-t33: 4.85
-t34: 4.70
-t35: 4.65
-t36: 5.05
-t37: 4.65
-t38: 4.65
-t39: 4.45
-t40: 4.75
+5.80, 4.60, 4.85, 4.70, 4.65, 5.05, 4.65, 4.65, 4.45, 4.75)
 average: 4.815
 
 These are better than random, and also better than our custom scheme. They seem
 to get better when they are allowed more moves, probably because they have more
 random moves that happen to reduce score.
+
+5, 4, 2, 3, 9, 5
 
 ================================================================================
 T1 EXP3             NumSteps = 160
@@ -150,16 +134,7 @@ DemeticMigProbability     = 100.0
 SwapMutationProbability   = 10.0
 *** ShrinkMutationProbability = 50.0
 
-t41 5.50
-    4.90
-    5.50
-    4.95
-    5.05
-    4.75
-    5.60
-    4.55
-    5.25
-t50 4.90
+(5.50, 4.90, 5.50, 4.95, 5.05, 4.75, 5.60, 4.55, 5.25, 4.90)
 
 t51 - 60
 **** CrossoverProbability      = 100.0
@@ -400,7 +375,8 @@ t67 3.75
 t68 6.75
 t69 5.30
 t70 6.55
-average 5.185
+Fitness Average Max: 5.185
+Average Time Per Generation: 0.005
 
 4,8, 50
 t71 4.95
@@ -413,7 +389,8 @@ t77 2.95
 t78 2.50
 t79 2.05
 t80 2.30
-average 2.705
+Fitness Average Max: 2.705
+Average Time Per Generation: 0.01
 
 DEFAULT
 8, 16, 100
@@ -427,7 +404,8 @@ t57 3.60
 t58 4.55
 t59 3.85
 t60 2.95
-average 3.28
+Fitness Average Max: 3.28
+Average Time Per Generation: 0.01
 
 16, 32, 200
 t81 1.95
@@ -440,7 +418,8 @@ t87 4.75
 t88 3.50
 t89 2.05
 t90 3.15
-average 2.925
+Fitness Average Max: 2.685
+Average Time Per Generation: 0.01
 
 The different tree complexities do seem to have some effect on the final scores.
 Generally, the more complex configurations yielded better results, and this is
@@ -501,3 +480,14 @@ that when it sees a block from afar, it will go towards it even if it is already
 against a wall. It is only when it is right next to it that the rover can tell
 that this is the case. This wastes some moves and also often gets the blocks in
 the unmovable 2x2 position. (observed the best result tree)
+
+Changes
+-remove change 2
+-add program that executes first child if UM==1, second child regardless
+
+Hypothesis
+-This gives the dozer
+    -increased probability of checking the UM sensor, which is easy to act on
+    -gives an easy way to move on to other activities after dealing with the block in front
+
+average: 2.925
